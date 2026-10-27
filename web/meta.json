@@ -89,9 +89,9 @@
       "elevation": 21.1,
       "azimuth": 81.0,
       "shadow_area_km2": 16.46,
-      "mean_shade": 0.3778,
-      "mean_shade_length_weighted": 0.2455,
-      "bike_mean_shade": 0.2669,
+      "mean_shade": 0.3779,
+      "mean_shade_length_weighted": 0.2454,
+      "bike_mean_shade": 0.267,
       "bike_mean_shade_length_weighted": 0.1666
     },
     {
@@ -100,7 +100,7 @@
       "azimuth": 92.1,
       "shadow_area_km2": 14.04,
       "mean_shade": 0.3084,
-      "mean_shade_length_weighted": 0.2032,
+      "mean_shade_length_weighted": 0.2031,
       "bike_mean_shade": 0.1927,
       "bike_mean_shade_length_weighted": 0.1231
     },
@@ -109,8 +109,8 @@
       "elevation": 40.5,
       "azimuth": 104.5,
       "shadow_area_km2": 12.8,
-      "mean_shade": 0.2817,
-      "mean_shade_length_weighted": 0.1862,
+      "mean_shade": 0.2816,
+      "mean_shade_length_weighted": 0.1864,
       "bike_mean_shade": 0.1605,
       "bike_mean_shade_length_weighted": 0.1037
     },
@@ -119,8 +119,8 @@
       "elevation": 49.6,
       "azimuth": 119.6,
       "shadow_area_km2": 12.05,
-      "mean_shade": 0.2668,
-      "mean_shade_length_weighted": 0.1767,
+      "mean_shade": 0.2667,
+      "mean_shade_length_weighted": 0.1764,
       "bike_mean_shade": 0.1395,
       "bike_mean_shade_length_weighted": 0.092
     },
@@ -130,18 +130,18 @@
       "azimuth": 139.4,
       "shadow_area_km2": 11.44,
       "mean_shade": 0.2493,
-      "mean_shade_length_weighted": 0.1679,
-      "bike_mean_shade": 0.1226,
-      "bike_mean_shade_length_weighted": 0.0831
+      "mean_shade_length_weighted": 0.1676,
+      "bike_mean_shade": 0.1228,
+      "bike_mean_shade_length_weighted": 0.0833
     },
     {
       "hour": 13,
       "elevation": 61.7,
       "azimuth": 165.6,
       "shadow_area_km2": 10.93,
-      "mean_shade": 0.2302,
-      "mean_shade_length_weighted": 0.158,
-      "bike_mean_shade": 0.11,
+      "mean_shade": 0.2299,
+      "mean_shade_length_weighted": 0.1579,
+      "bike_mean_shade": 0.1101,
       "bike_mean_shade_length_weighted": 0.0763
     },
     {
@@ -149,9 +149,9 @@
       "elevation": 61.7,
       "azimuth": 195.3,
       "shadow_area_km2": 10.88,
-      "mean_shade": 0.2265,
+      "mean_shade": 0.2262,
       "mean_shade_length_weighted": 0.1557,
-      "bike_mean_shade": 0.1086,
+      "bike_mean_shade": 0.1087,
       "bike_mean_shade_length_weighted": 0.0748
     },
     {
@@ -159,8 +159,8 @@
       "elevation": 57.0,
       "azimuth": 221.2,
       "shadow_area_km2": 11.44,
-      "mean_shade": 0.251,
-      "mean_shade_length_weighted": 0.1692,
+      "mean_shade": 0.2508,
+      "mean_shade_length_weighted": 0.1689,
       "bike_mean_shade": 0.122,
       "bike_mean_shade_length_weighted": 0.0819
     },
@@ -169,10 +169,10 @@
       "elevation": 49.3,
       "azimuth": 240.8,
       "shadow_area_km2": 12.11,
-      "mean_shade": 0.2751,
-      "mean_shade_length_weighted": 0.1836,
+      "mean_shade": 0.275,
+      "mean_shade_length_weighted": 0.1833,
       "bike_mean_shade": 0.1428,
-      "bike_mean_shade_length_weighted": 0.093
+      "bike_mean_shade_length_weighted": 0.0929
     },
     {
       "hour": 17,
@@ -180,8 +180,8 @@
       "azimuth": 255.8,
       "shadow_area_km2": 12.93,
       "mean_shade": 0.2962,
-      "mean_shade_length_weighted": 0.1964,
-      "bike_mean_shade": 0.1704,
+      "mean_shade_length_weighted": 0.1961,
+      "bike_mean_shade": 0.1706,
       "bike_mean_shade_length_weighted": 0.1078
     },
     {
@@ -190,28 +190,28 @@
       "azimuth": 268.1,
       "shadow_area_km2": 14.1,
       "mean_shade": 0.3218,
-      "mean_shade_length_weighted": 0.2112,
-      "bike_mean_shade": 0.2032,
-      "bike_mean_shade_length_weighted": 0.128
+      "mean_shade_length_weighted": 0.2111,
+      "bike_mean_shade": 0.2033,
+      "bike_mean_shade_length_weighted": 0.1281
     },
     {
       "hour": 19,
       "elevation": 20.8,
       "azimuth": 279.2,
       "shadow_area_km2": 16.33,
-      "mean_shade": 0.3746,
-      "mean_shade_length_weighted": 0.2448,
+      "mean_shade": 0.3745,
+      "mean_shade_length_weighted": 0.2446,
       "bike_mean_shade": 0.264,
-      "bike_mean_shade_length_weighted": 0.1663
+      "bike_mean_shade_length_weighted": 0.1662
     },
     {
       "hour": 20,
       "elevation": 11.3,
       "azimuth": 289.9,
       "shadow_area_km2": 21.11,
-      "mean_shade": 0.5035,
-      "mean_shade_length_weighted": 0.3278,
-      "bike_mean_shade": 0.4065,
+      "mean_shade": 0.5036,
+      "mean_shade_length_weighted": 0.3279,
+      "bike_mean_shade": 0.4066,
       "bike_mean_shade_length_weighted": 0.2562
     }
   ],

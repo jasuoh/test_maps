@@ -14,3 +14,4 @@ output_osm/
 
 # OSMnx-HTTP-Cache
 cache/
+.claude/

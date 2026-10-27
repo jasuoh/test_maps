@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cool & Safe Bike Heilbronn</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root { --ink:#2b2b2b; --muted:#6b6b6b; --bg:#ffffff; --panel:#ffffffee; --line:#e3e1dc;
+          --fast:#e8762b; --comb:#0d366b; --danger:#d03b3b; --sun:#f2b705; --shadow:#2a4d8f; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --ink:#ecebe8; --muted:#a9a7a1; --bg:#1d1d1b; --panel:#262624ee; --line:#3a3a37; --comb:#6da7ec; }
+  }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+               font:14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  #map { position:absolute; inset:0; }
+  .leaflet-tile-pane { filter: grayscale(1) brightness(1.08) contrast(0.85); }
+  #panel { position:absolute; z-index:1000; top:12px; left:12px; width:300px; max-width:calc(100vw - 32px);
+           background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px;
+           box-shadow:0 2px 12px #0002; }
+  h1 { font-size:15px; margin:0 0 2px; }
+  .sub { color:var(--muted); font-size:12px; margin-bottom:10px; }
+  label { display:flex; justify-content:space-between; align-items:center; gap:8px; margin:6px 0; }
+  input[type=range] { width:130px; }
+  select { font:inherit; }
+  .row { display:grid; grid-template-columns: 1fr auto auto; gap:2px 10px; font-variant-numeric:tabular-nums; }
+  .row b { font-weight:600; }
+  .sw { display:inline-block; width:18px; height:4px; border-radius:2px; vertical-align:middle; margin-right:6px; }
+  #stats { margin-top:10px; border-top:1px solid var(--line); padding-top:8px; }
+  .hint { color:var(--muted); font-size:12px; margin-top:6px; }
+  table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; font-size:13px; }
+  th, td { text-align:right; padding:2px 4px; } th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:500; }
+  @media (max-width: 480px) { #panel { left:8px; right:8px; top:8px; width:auto; } }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="panel">
+  <h1>Cool &amp; Safe Bike · Heilbronn</h1>
+  <div class="sub">Schatten (LoD2 + Baumkataster) · ATRAI-Gefahrenzonen · 15. Juli</div>
+  <label>Uhrzeit <select id="hour"></select></label>
+  <label>Hitze (Sonne meiden) <input id="w_heat" type="range" min="0" max="3" step="0.25" value="1"></label>
+  <label>Gefahr (Überholen) <input id="w_danger" type="range" min="0" max="3" step="0.25" value="1.5"></label>
+  <label>Feinstaub <input id="w_pm" type="range" min="0" max="3" step="0.25" value="0.5"></label>
+  <label>Rauheit <input id="w_rough" type="range" min="0" max="3" step="0.25" value="0.5"></label>
+  <label>Gefahrenstellen zeigen <input id="show_danger" type="checkbox" checked></label>
+  <label>Schatten der Stunde zeigen <input id="show_shadow" type="checkbox" checked></label>
+  <div class="hint" id="status">Lade Radnetz …</div>
+  <div id="stats"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const map = L.map('map', { preferCanvas: true }).setView([49.1427, 9.2186], 15);
+map.createPane('shadowPane').style.zIndex = 350;
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap · LoD2: LGL, dl-de/by-2.0 · Baumkataster: Stadt Heilbronn · ATRAI'
+}).addTo(map);
+
+let G, adj, hours, start = null, end = null;
+const layers = { fast: null, comb: null, danger: null, shadow: null, markers: L.layerGroup().addTo(map) };
+
+// --- Graph laden ---------------------------------------------------------------------
+fetch('bike_graph.json').then(r => r.json()).then(g => {
+  G = g; hours = g.hours;
+  hours.forEach(h => $('hour').add(new Option(`${String(h).padStart(2, '0')}:00`, h, h === 15, h === 15)));
+  adj = Array.from({ length: g.nodes.length }, () => []);
+  g.edges.forEach((e, i) => adj[e[0]].push(i));
+  buildGrid();
+  drawDanger();
+  $('status').textContent = 'Klick 1: Start · Klick 2: Ziel';
+  drawShadow();
+});
+
+// Raster für "nächster Knoten"
+let grid = new Map();
+const CELL = 0.002;
+function key(x, y) { return Math.floor(x / CELL) + ',' + Math.floor(y / CELL); }
+function buildGrid() {
+  G.nodes.forEach((n, i) => { if (!adj[i].length) return; const k = key(n[0], n[1]);
+    (grid.get(k) || grid.set(k, []).get(k)).push(i); });
+}
+function nearest(lon, lat) {
+  let best = -1, bd = Infinity;
+  for (let r = 0; r < 6 && best < 0; r++) {
+    const cx = Math.floor(lon / CELL), cy = Math.floor(lat / CELL);
+    for (let dx = -r; dx <= r; dx++) for (let dy = -r; dy <= r; dy++) {
+      for (const i of grid.get((cx + dx) + ',' + (cy + dy)) || []) {
+        const n = G.nodes[i], d = (n[0] - lon) ** 2 * 0.43 + (n[1] - lat) ** 2;
+        if (d < bd) { bd = d; best = i; }
+      }
+    }
+  }
+  return best;
+}
+
+// --- Kosten + Dijkstra ----------------------------------------------------------------
+function weights() {
+  return { heat: +$('w_heat').value, danger: +$('w_danger').value, pm: +$('w_pm').value, rough: +$('w_rough').value };
+}
+function costFn(w, hi) {
+  // Zeit × (1 + w_heat·(1−Schatten) + w_danger·Gefahr + w_pm·PM + w_rough·Rauheit)
+  return e => e[3] * (1 + w.heat * (1 - e[8][hi]) + w.danger * e[4] + w.pm * e[5] + w.rough * e[6]);
+}
+function dijkstra(s, t, cost) {
+  const n = G.nodes.length, dist = new Float64Array(n).fill(Infinity), prev = new Int32Array(n).fill(-1);
+  const heap = [[0, s]]; dist[s] = 0;
+  const push = x => { heap.push(x); let i = heap.length - 1;
+    while (i > 0) { const p = (i - 1) >> 1; if (heap[p][0] <= heap[i][0]) break; [heap[p], heap[i]] = [heap[i], heap[p]]; i = p; } };
+  const pop = () => { const top = heap[0], last = heap.pop();
+    if (heap.length) { heap[0] = last; let i = 0;
+      for (;;) { const l = 2 * i + 1, r = l + 1; let m = i;
+        if (l < heap.length && heap[l][0] < heap[m][0]) m = l;
+        if (r < heap.length && heap[r][0] < heap[m][0]) m = r;
+        if (m === i) break; [heap[m], heap[i]] = [heap[i], heap[m]]; i = m; } }
+    return top; };
+  while (heap.length) {
+    const [d, u] = pop();
+    if (u === t) break;
+    if (d > dist[u]) continue;
+    for (const ei of adj[u]) { const e = G.edges[ei], nd = d + cost(e);
+      if (nd < dist[e[1]]) { dist[e[1]] = nd; prev[e[1]] = ei; push([nd, e[1]]); } }
+  }
+  if (prev[t] < 0 && s !== t) return null;
+  const path = []; for (let v = t; v !== s; v = G.edges[prev[v]][0]) path.push(prev[v]);
+  return path.reverse();
+}
+function summary(path, hi) {
+  let L = 0, T = 0, S = 0, D = 0, Dm = 0;
+  for (const ei of path) { const e = G.edges[ei]; L += e[2]; T += e[3]; S += e[2] * e[8][hi]; D += e[2] * e[4];
+    if (e[7] & 1) Dm += e[2]; }
+  return { L, T, shade: S / L, danger: D / L, measured: Dm / L };
+}
+
+// --- Zeichnen --------------------------------------------------------------------------
+function drawPath(path, color, weight) {
+  const coords = path.flatMap(ei => G.edges[ei][9].map(c => [c[1], c[0]]));
+  return L.polyline(coords, { color, weight, opacity: 0.95, lineCap: 'round' }).addTo(map);
+}
+function drawDanger() {
+  if (layers.danger) map.removeLayer(layers.danger);
+  if (!$('show_danger').checked) return;
+  const lines = G.edges.filter(e => (e[7] & 1) && e[4] >= 0.5).map(e => e[9].map(c => [c[1], c[0]]));
+  layers.danger = L.polyline(lines, { color: getComputedStyle(document.documentElement).getPropertyValue('--danger'),
+                                      weight: 4, opacity: 0.55, interactive: false }).addTo(map);
+}
+const shadowCache = {};
+function drawShadow() {
+  if (layers.shadow) { map.removeLayer(layers.shadow); layers.shadow = null; }
+  if (!$('show_shadow').checked) return;
+  const h = String($('hour').value).padStart(2, '0');
+  $('status').textContent = `Lade Schatten ${h}:00 …`;
+  const show = gj => {
+    if (!$('show_shadow').checked || String($('hour').value).padStart(2, '0') !== h) return;
+    if (layers.shadow) map.removeLayer(layers.shadow);
+    layers.shadow = L.geoJSON(gj, { pane: 'shadowPane', interactive: false,
+      style: { stroke: false, fillColor: getComputedStyle(document.documentElement).getPropertyValue('--shadow'),
+               fillOpacity: 0.45 } }).addTo(map);
+    $('status').textContent = `Schatten ${h}:00 · blaue Flächen = Schatten`;
+  };
+  if (shadowCache[h]) return show(shadowCache[h]);
+  fetch(`../shadows/shadow_${h}.geojson`).then(r => r.json()).then(gj => { shadowCache[h] = gj; show(gj); })
+    .catch(() => { $('status').textContent = `Schatten ${h}:00 konnte nicht geladen werden`; });
+}
+function fmt(r) {
+  return `<td>${(r.L / 1000).toFixed(2)} km</td><td>${(r.T / 60).toFixed(1)} min</td>` +
+         `<td>${Math.round(r.shade * 100)} %</td><td>${r.danger.toFixed(2)}</td>`;
+}
+function route() {
+  ['fast', 'comb'].forEach(k => { if (layers[k]) map.removeLayer(layers[k]); layers[k] = null; });
+  if (start == null || end == null) return;
+  const hi = hours.indexOf(+$('hour').value);
+  const pf = dijkstra(start, end, e => e[3]);
+  const pc = dijkstra(start, end, costFn(weights(), hi));
+  if (!pf || !pc) { $('stats').innerHTML = '<div class="hint">Keine Verbindung gefunden.</div>'; return; }
+  const css = getComputedStyle(document.documentElement);
+  layers.fast = drawPath(pf, css.getPropertyValue('--fast'), 4);
+  layers.comb = drawPath(pc, css.getPropertyValue('--comb'), 5);
+  // sonnige Abschnitte (Schatten < 30 %) der Cool-&-safe-Route gelb markieren
+  const sunny = pc.filter(ei => G.edges[ei][8][hi] < 0.3).map(ei => G.edges[ei][9].map(c => [c[1], c[0]]));
+  layers.comb = L.layerGroup([layers.comb, L.polyline(sunny, { color: css.getPropertyValue('--sun'), weight: 3,
+    dashArray: '4 6', opacity: 1, interactive: false })]).addTo(map);
+  const a = summary(pf, hi), b = summary(pc, hi);
+  $('stats').innerHTML = `<table>
+    <tr><th></th><th>Länge</th><th>Zeit</th><th>Schatten</th><th>Gefahr</th></tr>
+    <tr><td><span class="sw" style="background:var(--fast)"></span>Schnellste</td>${fmt(a)}</tr>
+    <tr><td><span class="sw" style="background:var(--comb)"></span>Cool &amp; safe</td>${fmt(b)}</tr></table>
+    <div class="hint"><span class="sw" style="background:var(--sun)"></span>sonnige Abschnitte der Cool-&amp;-safe-Route</div>
+    <div class="hint">Gefahr 0–1 (Rang innerhalb gemessener Straßen). Gemessen auf
+    ${Math.round(b.measured * 100)} % der Cool-&amp;-safe-Route; ungemessene Abschnitte zählen neutral (0,5).</div>
+    <div class="hint">Klick: neuer Start</div>`;
+}
+map.on('click', ev => {
+  if (!G) return;
+  const n = nearest(ev.latlng.lng, ev.latlng.lat);
+  if (n < 0) return;
+  if (start == null || end != null) { start = n; end = null; layers.markers.clearLayers(); }
+  else end = n;
+  const p = G.nodes[n];
+  L.circleMarker([p[1], p[0]], { radius: 7, color: '#fff', weight: 2, fillColor: end == null ? '#2a9d55' : '#2b2b2b', fillOpacity: 1 })
+    .addTo(layers.markers);
+  if (end == null) $('stats').innerHTML = '<div class="hint">Jetzt Ziel anklicken</div>';
+  route();
+});
+['hour', 'w_heat', 'w_danger', 'w_pm', 'w_rough'].forEach(id => $(id).addEventListener('input', route));
+$('hour').addEventListener('change', drawShadow);
+$('show_danger').addEventListener('change', drawDanger);
+$('show_shadow').addEventListener('change', drawShadow);
+</script>
+</body>
+</html>

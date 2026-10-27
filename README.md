@@ -15,6 +15,25 @@ uv venv -p 3.12 .venv && uv pip install -p .venv -r requirements.txt
 .venv/bin/python -m pytest -q tests         # unit tests (cube, L-shape, gable roof, …)
 ```
 
+### Bike MVP (browser, no backend)
+
+```bash
+.venv/bin/python -m pipeline.export_mvp          # web/mvp/bike_graph.json
+python3 -m http.server 8765 --directory web      # then open http://localhost:8765/mvp/
+```
+
+How to use it:
+- Click a start point, then a destination.
+- Pick the hour and set the weights for heat, danger, PM2.5 and roughness.
+
+The page computes two routes in the browser with Dijkstra:
+- **fastest** (orange): travel time only.
+- **cool & safe** (blue): the combined cost.
+
+Map layers:
+- ATRAI danger spots (danger ≥ 0.5) are drawn as red lines.
+- The shadow layer for the chosen hour can be switched on.
+
 Options for `run_all`:
 - `--buildings osm` uses OSM buildings only (for comparison).
 - `--radius 3000` limits the run to 3 km around the Marktplatz.
@@ -126,7 +145,7 @@ We use ranks because ATRAI's indices are relative by design (median risk index 0
 |---|---:|
 | speed | 34 % |
 | roughness | 30 % |
-| PM2.5 | 18 % |
+| PM2.5 (≥ 3 readings) | 13 % |
 | danger | 7 % |
 
 Coverage is concentrated on the routes the sensor bikes actually rode.
