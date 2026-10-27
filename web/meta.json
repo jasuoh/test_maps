@@ -1,0 +1,221 @@
+{
+  "reference_date": "2026-07-15",
+  "hours": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "timezone": "Europe/Berlin",
+  "sun": [
+    {
+      "hour": 8,
+      "elevation": 21.09,
+      "azimuth": 81.04
+    },
+    {
+      "hour": 9,
+      "elevation": 30.85,
+      "azimuth": 92.13
+    },
+    {
+      "hour": 10,
+      "elevation": 40.53,
+      "azimuth": 104.53
+    },
+    {
+      "hour": 11,
+      "elevation": 49.6,
+      "azimuth": 119.61
+    },
+    {
+      "hour": 12,
+      "elevation": 57.18,
+      "azimuth": 139.4
+    },
+    {
+      "hour": 13,
+      "elevation": 61.74,
+      "azimuth": 165.57
+    },
+    {
+      "hour": 14,
+      "elevation": 61.67,
+      "azimuth": 195.26
+    },
+    {
+      "hour": 15,
+      "elevation": 56.98,
+      "azimuth": 221.24
+    },
+    {
+      "hour": 16,
+      "elevation": 49.33,
+      "azimuth": 240.85
+    },
+    {
+      "hour": 17,
+      "elevation": 40.22,
+      "azimuth": 255.81
+    },
+    {
+      "hour": 18,
+      "elevation": 30.52,
+      "azimuth": 268.15
+    },
+    {
+      "hour": 19,
+      "elevation": 20.76,
+      "azimuth": 279.21
+    },
+    {
+      "hour": 20,
+      "elevation": 11.3,
+      "azimuth": 289.88
+    }
+  ],
+  "stats": [
+    {
+      "hour": 8,
+      "elevation": 21.1,
+      "azimuth": 81.0,
+      "shadow_area_km2": 16.46,
+      "mean_shade": 0.3778,
+      "mean_shade_length_weighted": 0.2455,
+      "bike_mean_shade": 0.2669,
+      "bike_mean_shade_length_weighted": 0.1666
+    },
+    {
+      "hour": 9,
+      "elevation": 30.8,
+      "azimuth": 92.1,
+      "shadow_area_km2": 14.04,
+      "mean_shade": 0.3084,
+      "mean_shade_length_weighted": 0.2032,
+      "bike_mean_shade": 0.1927,
+      "bike_mean_shade_length_weighted": 0.1231
+    },
+    {
+      "hour": 10,
+      "elevation": 40.5,
+      "azimuth": 104.5,
+      "shadow_area_km2": 12.8,
+      "mean_shade": 0.2817,
+      "mean_shade_length_weighted": 0.1862,
+      "bike_mean_shade": 0.1605,
+      "bike_mean_shade_length_weighted": 0.1037
+    },
+    {
+      "hour": 11,
+      "elevation": 49.6,
+      "azimuth": 119.6,
+      "shadow_area_km2": 12.05,
+      "mean_shade": 0.2668,
+      "mean_shade_length_weighted": 0.1767,
+      "bike_mean_shade": 0.1395,
+      "bike_mean_shade_length_weighted": 0.092
+    },
+    {
+      "hour": 12,
+      "elevation": 57.2,
+      "azimuth": 139.4,
+      "shadow_area_km2": 11.44,
+      "mean_shade": 0.2493,
+      "mean_shade_length_weighted": 0.1679,
+      "bike_mean_shade": 0.1226,
+      "bike_mean_shade_length_weighted": 0.0831
+    },
+    {
+      "hour": 13,
+      "elevation": 61.7,
+      "azimuth": 165.6,
+      "shadow_area_km2": 10.93,
+      "mean_shade": 0.2302,
+      "mean_shade_length_weighted": 0.158,
+      "bike_mean_shade": 0.11,
+      "bike_mean_shade_length_weighted": 0.0763
+    },
+    {
+      "hour": 14,
+      "elevation": 61.7,
+      "azimuth": 195.3,
+      "shadow_area_km2": 10.88,
+      "mean_shade": 0.2265,
+      "mean_shade_length_weighted": 0.1557,
+      "bike_mean_shade": 0.1086,
+      "bike_mean_shade_length_weighted": 0.0748
+    },
+    {
+      "hour": 15,
+      "elevation": 57.0,
+      "azimuth": 221.2,
+      "shadow_area_km2": 11.44,
+      "mean_shade": 0.251,
+      "mean_shade_length_weighted": 0.1692,
+      "bike_mean_shade": 0.122,
+      "bike_mean_shade_length_weighted": 0.0819
+    },
+    {
+      "hour": 16,
+      "elevation": 49.3,
+      "azimuth": 240.8,
+      "shadow_area_km2": 12.11,
+      "mean_shade": 0.2751,
+      "mean_shade_length_weighted": 0.1836,
+      "bike_mean_shade": 0.1428,
+      "bike_mean_shade_length_weighted": 0.093
+    },
+    {
+      "hour": 17,
+      "elevation": 40.2,
+      "azimuth": 255.8,
+      "shadow_area_km2": 12.93,
+      "mean_shade": 0.2962,
+      "mean_shade_length_weighted": 0.1964,
+      "bike_mean_shade": 0.1704,
+      "bike_mean_shade_length_weighted": 0.1078
+    },
+    {
+      "hour": 18,
+      "elevation": 30.5,
+      "azimuth": 268.1,
+      "shadow_area_km2": 14.1,
+      "mean_shade": 0.3218,
+      "mean_shade_length_weighted": 0.2112,
+      "bike_mean_shade": 0.2032,
+      "bike_mean_shade_length_weighted": 0.128
+    },
+    {
+      "hour": 19,
+      "elevation": 20.8,
+      "azimuth": 279.2,
+      "shadow_area_km2": 16.33,
+      "mean_shade": 0.3746,
+      "mean_shade_length_weighted": 0.2448,
+      "bike_mean_shade": 0.264,
+      "bike_mean_shade_length_weighted": 0.1663
+    },
+    {
+      "hour": 20,
+      "elevation": 11.3,
+      "azimuth": 289.9,
+      "shadow_area_km2": 21.11,
+      "mean_shade": 0.5035,
+      "mean_shade_length_weighted": 0.3278,
+      "bike_mean_shade": 0.4065,
+      "bike_mean_shade_length_weighted": 0.2562
+    }
+  ],
+  "shade_semantics": "shade_HH = share of the edge in shadow at HH:00 (0 = full sun, 1 = full shade)",
+  "crit_semantics": "crit_* in 0..1, 1 = bad; edges without measurement carry the median (has_* = false)",
+  "attribution": "© OpenStreetMap contributors (ODbL); 3D-Gebäudemodell LoD2: LGL, www.lgl-bw.de, dl-de/by-2.0; Baumkataster: Stadt Heilbronn, dl-de/by-2.0; Radsensordaten: ATRAI (data.atrai.bike)"
+}

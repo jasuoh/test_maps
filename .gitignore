@@ -1,0 +1,16 @@
+# Umgebung
+.venv/
+__pycache__/
+.pytest_cache/
+*.log
+
+# Rohdaten und Zwischenstände (per `python -m pipeline.run_all` neu ladbar)
+data/
+
+# Große Ausgaben (> 100 MB GitHub-Limit) – Frontend nutzt web/
+output/shadows.gpkg
+output/*.graphml
+output_osm/
+
+# OSMnx-HTTP-Cache
+cache/

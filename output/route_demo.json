@@ -1,0 +1,13 @@
+{
+  "hour": 15,
+  "factor": 2.0,
+  "shortest": {
+    "length_m": 903,
+    "shade_share": 0.346
+  },
+  "shadiest": {
+    "length_m": 1058,
+    "shade_share": 0.674,
+    "detour_pct": 17.3
+  }
+}

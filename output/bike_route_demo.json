@@ -1,0 +1,51 @@
+{
+  "hour": 15,
+  "weights_combined": {
+    "heat": 1.0,
+    "danger": 1.5,
+    "pm": 0.5,
+    "rough": 0.5
+  },
+  "fastest": {
+    "length_m": 3466,
+    "time_min": 13.4,
+    "shade": 0.33,
+    "danger": 0.511,
+    "pm": 0.495,
+    "rough": 0.307,
+    "measured_share": {
+      "danger": 0.392,
+      "pm": 0.261,
+      "rough": 0.878,
+      "speed": 0.925
+    }
+  },
+  "coolest": {
+    "length_m": 3489,
+    "time_min": 13.8,
+    "shade": 0.42,
+    "danger": 0.504,
+    "pm": 0.522,
+    "rough": 0.283,
+    "measured_share": {
+      "danger": 0.304,
+      "pm": 0.235,
+      "rough": 0.865,
+      "speed": 0.913
+    }
+  },
+  "combined": {
+    "length_m": 3336,
+    "time_min": 13.8,
+    "shade": 0.438,
+    "danger": 0.474,
+    "pm": 0.498,
+    "rough": 0.295,
+    "measured_share": {
+      "danger": 0.348,
+      "pm": 0.305,
+      "rough": 0.88,
+      "speed": 0.926
+    }
+  }
+}
